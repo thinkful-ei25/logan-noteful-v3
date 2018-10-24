@@ -52,7 +52,7 @@ describe('Notes RESTful API', function () {
         });
     });
     it('should return notes if searchTerm matches', function () {
-      const searchTerm = 'read';
+      const searchTerm = 'lady';
       const regex = new RegExp(searchTerm, 'i');
       const filterNote = { $regex: regex };
       return Promise.all([
