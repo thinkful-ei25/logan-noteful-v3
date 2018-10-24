@@ -35,36 +35,30 @@ app.use((req, res, next) => {
 });
 
 // Custom Error Handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   if (err.status) {
     const errBody = Object.assign({}, err, { message: err.message });
     res.status(err.status).json(errBody);
   } else {
+    // eslint-disable-next-line no-console
     console.error(err);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
 // Listen for incoming connections
-// if (require.main === module)
 if (require.main === module) {
-  mongoose
-    .connect(
-      MONGODB_URI,
-      { useNewUrlParser: true }
-    )
+  // Connect to DB and Listen for incoming connections
+  mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
     .catch(err => {
-      console.error(`ERROR: ${err.message}`);
-      console.error('\n === Did you remember to start `mongod`? === \n');
       console.error(err);
     });
-  app
-    .listen(PORT, function() {
-      console.info(`Server listening on ${this.address().port}`);
-    })
-    .on('error', err => {
-      console.error(err);
-    });
+
+  app.listen(PORT, function () {
+    console.info(`Server listening on ${this.address().port}`);
+  }).on('error', err => {
+    console.error(err);
+  });
 }
 
 module.exports = app; // Export for testing
