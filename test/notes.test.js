@@ -5,7 +5,7 @@
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const mongoose = require('moongoose');
+const mongoose = require('mongoose');
 const Note = require('../models/note');
 const { notes } = require('../db/seed/notes');
 const app = require('../server');
@@ -35,15 +35,15 @@ describe('Noteful API tests', function() {
   });
 });
 
-// describe('Reality Check', () => {
-//   it('true should be true', () => {
-//     expect(true).to.be.true;
-//   });
+describe('Reality Check', () => {
+  it('true should be true', () => {
+    expect(true).to.be.true;
+  });
 
-//   it('2 + 2 should equal 4', () => {
-//     expect(2 + 2).to.equal(4);
-//   });
-// });
+  it('2 + 2 should equal 4', () => {
+    expect(2 + 2).to.equal(4);
+  });
+});
 
 // describe('Environment', () => {
 //   it('NODE_ENV should be "test"', () => {
