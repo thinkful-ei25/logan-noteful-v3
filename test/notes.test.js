@@ -36,7 +36,7 @@ describe('Notes RESTful API', function () {
 
   //GET notes
   describe('GET /api/notes', function () {
-    it('should return all existing restaurants', function () {
+    it('should return all existing notes', function () {
       // 1) Call the database **and** the API
       // 2) Wait for both promises to resolve using `Promise.all`
       return Promise.all([
