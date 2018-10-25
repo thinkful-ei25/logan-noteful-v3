@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const { PORT, MONGODB_URI } = require('./config');
 
 const notesRouter = require('./routes/notes');
+const foldersRouter = require('./routes/folders');
 
 // Create an Express application
 const app = express();
@@ -26,6 +27,7 @@ app.use(express.json());
 
 // Mount routers
 app.use('/api/notes', notesRouter);
+app.use('/api/folders', foldersRouter);
 
 // Custom 404 Not Found route handler
 app.use((req, res, next) => {
@@ -35,16 +37,23 @@ app.use((req, res, next) => {
 });
 
 // Custom Error Handler
-app.use((err, req, res) => {
-  if (err.status) {
-    const errBody = Object.assign({}, err, { message: err.message });
-    res.status(err.status).json(errBody);
-  } else {
-    // eslint-disable-next-line no-console
-    console.error(err);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  res.json({
+    message: err.message,
+    error: app.get('env') === 'development' ? err : {}
+  });
 });
+// app.use((err, req, res) => {
+//   if (err.status) {
+//     const errBody = Object.assign({}, err, { message: err.message });
+//     res.status(err.status).json(errBody);
+//   } else {
+//     // eslint-disable-next-line no-console
+//     console.error(err);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// });
 
 // Listen for incoming connections
 if (require.main === module) {
