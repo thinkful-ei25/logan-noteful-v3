@@ -8,8 +8,9 @@ const app = require('../server');
 const { TEST_MONGODB_URI } = require('../config');
 
 const Note = require('../models/note');
+const Folder = require('../models/folder');
 
-const { notes } = require('../db/seed/notes');
+const { notes, folders } = require('../db/seed/data');
 
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -23,7 +24,9 @@ describe('Notes RESTful API', function () {
   });
 
   beforeEach(function () {
-    return Note.insertMany(notes);
+    return Note.insertMany(notes),
+      Folder.insertMany(folders),
+      Folder.createIndexes()
   });
 
   afterEach(function () {
@@ -65,10 +68,26 @@ describe('Notes RESTful API', function () {
           expect(res).to.be.json;
           expect(res.body).to.be.a('array');
           //console.log(res.body);
-          expect(res.body[0]).to.be.an('object');
           expect(res.body[0].id).to.equal(data[0].id);
         });
     });
+  });
+  it('should return correct search results for a folderId query', function () {
+    let data;
+    return Folder.findOne()
+      .then((_data) => {
+        data = _data;
+        return Promise.all([
+          Note.find({ folderId: data.id }),
+          chai.request(app).get(`/api/notes?folderId=${data.id}`)
+        ]);
+      })
+      .then(([data, res]) => {
+        expect(res).to.have.status(200);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('array');
+        expect(res.body).to.have.length(data.length);
+      });
   });
 
   //Get note by id
@@ -87,7 +106,7 @@ describe('Notes RESTful API', function () {
           expect(res).to.be.json;
 
           expect(res.body).to.be.an('object');
-          expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt');
+          expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId');
 
           // 3) then compare database results to API response
           expect(res.body.id).to.equal(data.id);
@@ -157,6 +176,7 @@ describe('Notes RESTful API', function () {
         })
         .then(function (res) {
           expect(res).to.have.status(200);
+          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId');
           return Note.findById(item.id);
         })
         .then(function (note) {
