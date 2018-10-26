@@ -51,6 +51,7 @@ describe('Notes RESTful API', function () {
           expect(res.body).to.have.length(data.length);
         });
     });
+
     it('should return notes if searchTerm matches', function () {
       const searchTerm = 'lady';
       const regex = new RegExp(searchTerm, 'i');
