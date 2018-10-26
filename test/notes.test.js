@@ -24,9 +24,9 @@ describe('Notes RESTful API', function () {
   });
 
   beforeEach(function () {
-    return Note.insertMany(notes),
-      Folder.insertMany(folders),
-      Folder.createIndexes()
+    const note = Note.insertMany(notes);
+    const folder = Folder.insertMany(folders);
+    return Promise.all([note, folder]);
   });
 
   afterEach(function () {
@@ -187,6 +187,8 @@ describe('Notes RESTful API', function () {
         })
     });
   });
+
+  //delete/remove
   describe('DELETE /api/notes/:id', function () {
     it('should delete item by id', function () {
       let note;
