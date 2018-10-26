@@ -33,7 +33,7 @@ describe('Notes RESTful API', function () {
 
       Tag.insertMany(tags),
       Tag.createIndexes()
-    ])
+    ]);
   });
 
   afterEach(function () {
