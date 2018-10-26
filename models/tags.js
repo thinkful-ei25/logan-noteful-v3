@@ -20,3 +20,5 @@ const config = {
 
 tagsSchema.set('toObject', config);
 tagsSchema.set('toJSON', config);
+
+module.exports = mongoose.model('Tag', tagsSchema);
