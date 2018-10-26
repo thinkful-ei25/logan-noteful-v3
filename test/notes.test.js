@@ -67,27 +67,29 @@ describe('Notes RESTful API', function () {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('array');
-          //console.log(res.body);
+          console.log(res.body);
           expect(res.body[0].id).to.equal(data[0].id);
         });
     });
-  });
-  it('should return correct search results for a folderId query', function () {
-    let data;
-    return Folder.findOne()
-      .then((_data) => {
-        data = _data;
-        return Promise.all([
-          Note.find({ folderId: data.id }),
-          chai.request(app).get(`/api/notes?folderId=${data.id}`)
-        ]);
-      })
-      .then(([data, res]) => {
-        expect(res).to.have.status(200);
-        expect(res).to.be.json;
-        expect(res.body).to.be.a('array');
-        expect(res.body).to.have.length(data.length);
-      });
+
+
+    it('should return correct search results for a folderId query', function () {
+      let data;
+      return Folder.findOne()
+        .then((_data) => {
+          data = _data;
+          return Promise.all([
+            Note.find({ folderId: data.id }),
+            chai.request(app).get(`/api/notes?folderId=${data.id}`)
+          ]);
+        })
+        .then(([data, res]) => {
+          expect(res).to.have.status(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('array');
+          expect(res.body).to.have.length(data.length);
+        });
+    });
   });
 
   //Get note by id
