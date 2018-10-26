@@ -22,7 +22,7 @@ router.get('/', (req, res, next) => {
 
 //get/read single item
 
-router.get('/id', (req, res, next) => {
+router.get('/:id', (req, res, next) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');

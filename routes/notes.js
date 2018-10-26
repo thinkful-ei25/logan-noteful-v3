@@ -80,16 +80,16 @@ router.post('/', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-  console.log(tags[0]);
-  console.log(tags);
+  // console.log(tags[0]);
+  // console.log(tags);
   if (tags) {
-    tags.forEach(element => {
-      if (!mongoose.Types.ObjectId.isValid(element)) {
+    for (let i = 0; i < tags.length; i++) {
+      if (!mongoose.Types.ObjectId.isValid(tags[i])) {
         const err = new Error('The tags `id` is not valid');
         err.status = 400;
         return next(err);
       }
-    });
+    }
   }
 
 
