@@ -39,6 +39,15 @@ app.use((req, res, next) => {
 });
 
 // Custom Error Handler
+// app.use((err, req, res, next) => {
+//   if (err.status) {
+//     const errBody = Object.assign({}, err, { message: err.message });
+//     res.status(err.status).json(errBody);
+//   } else {
+//     console.error(err);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// });
 app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({
@@ -46,16 +55,6 @@ app.use(function (err, req, res, next) {
     error: app.get('env') === 'development' ? err : {}
   });
 });
-// app.use((err, req, res) => {
-//   if (err.status) {
-//     const errBody = Object.assign({}, err, { message: err.message });
-//     res.status(err.status).json(errBody);
-//   } else {
-//     // eslint-disable-next-line no-console
-//     console.error(err);
-//     res.status(500).json({ message: 'Internal Server Error' });
-//   }
-// });
 
 // Listen for incoming connections
 if (require.main === module) {
